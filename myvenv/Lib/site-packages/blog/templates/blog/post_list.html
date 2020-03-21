@@ -1,0 +1,43 @@
+{% extends "blog/main_layout.html" %}
+
+{% block meta_des %}
+    {% if tag %}
+      {{ mysite.title }}の、タグ: {{ tag.name }} の検索結果一覧です。
+    {% elif category %}
+      {{ mysite.title }}の、カテゴリー: {{ category.name }} の検索結果一覧です。
+    {% else %}
+        {{ mysite.description }}
+    {% endif %}
+{% endblock %}
+
+{% block title %}
+    {% if tag %}
+        {{ tag.name }} | {{ mysite.title }}
+    {% elif category %}
+        {{ category.name }} | {{ mysite.title }}
+    {% else %}
+        {{ mysite.title }}
+    {% endif %}
+{% endblock %}
+
+{% block bread %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'blog:index' %}">記事一覧</a></li>
+    {% if tag %}
+        <li class="breadcrumb-item">{{ tag.name }}</li>
+    {% elif category %}
+        <li class="breadcrumb-item">{{ category.name }}</li>
+    {% endif %}
+  </ol>
+</nav>
+{% endblock %}
+
+{% block content %}
+  {% for post in post_list %}
+    <article>
+      {% include 'blog/widgets/list_card.html' %}
+    </article>
+  {% endfor %}
+  {% include "blog/widgets/page.html" %}
+{% endblock %}

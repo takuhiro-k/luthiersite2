@@ -1,0 +1,44 @@
+{% extends "blog/main_layout.html" %}
+{% load static %}
+
+{% block meta_des %}
+  {{ post.get_description }}
+{% endblock %}
+
+{% block title %}{{post.title}} - {{ mysite.title }}{% endblock %}
+
+{% block bread%}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'blog:index' %}">記事一覧</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'blog:category' post.category.name %}">{{ post.category.name }}</a></li>
+    <li class="breadcrumb-item">{{ post.title }}</li>
+  </ol>
+</nav>
+{% endblock %}
+
+{% block content %}
+<!-- 目次部分 -->
+<div id="toc"></div>
+
+<!-- 記事詳細部分 -->
+<article>
+  {% include 'blog/widgets/detail_card.html' %}
+</article>
+
+<!-- コメント一覧 -->
+<div id="comment-area">
+  {% for comment in post.comment_set.all %}
+    {% include 'blog/widgets/detail_comment.html' %}
+  {% endfor %}
+</div>
+
+<div class="text-center my-5">
+  <a class="btn btn-{{ mysite.color }} btn-lg text-white" href="{% url 'blog:comment' post.pk %}" rel="nofollow">コメントページへ</a>
+</div>
+
+{% endblock %}
+
+{% block extrajs %}
+<script src="{% static 'blog/js/toc.js' %}"></script>
+{% endblock %}
